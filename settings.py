@@ -3,7 +3,7 @@ WIDTH = 40
 HEIGHT = 40
 
 # Size of a single cell
-CELL_SIZE = 16
+CELL_SIZE = 20
 
 # Initial count of zombies and humans when starting the simulation
 INITIAL_ZOMBIES = 5
@@ -19,6 +19,6 @@ HUMAN_COLOR = (0, 128, 255)
 ZOMBIE_COLOR = (255, 0, 0)
 
 # Image asset paths
-BACKGROUND_IMAGE_PATH = "./assets/grass.png"
+BACKGROUND_IMAGE_PATH = "./assets/blackbg.jpg"
 HUMAN_IMAGE_PATH = "./assets/human.png"
 ZOMBIE_IMAGE_PATH = "./assets/zombie.png"
