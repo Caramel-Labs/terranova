@@ -17,3 +17,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 HUMAN_COLOR = (0, 128, 255)
 ZOMBIE_COLOR = (255, 0, 0)
+
+# Image asset paths
+BACKGROUND_IMAGE_PATH = "./assets/grass.png"
+HUMAN_IMAGE_PATH = "./assets/human.png"
+ZOMBIE_IMAGE_PATH = "./assets/zombie.png"
