@@ -29,7 +29,8 @@ def visualize_space_colony():
     model = SpaceColony(width=WIDTH, height=HEIGHT)
 
     # Set up the font for rendering text
-    font = pygame.font.Font(None, cell_size - 4)
+    font = pygame.font.Font(None, 24)
+    stats_font = pygame.font.Font(None, 20)
 
     # Main game loop
     running = True
@@ -42,6 +43,10 @@ def visualize_space_colony():
         # Take a simulation step
         model.step()
         step_count += 1
+
+        # Get the current state of the model from the dataframe
+        model_data = model.datacollector.get_model_vars_dataframe()
+        current_data = model_data.iloc[-1]  # Get the latest row of data
 
         # Clear the screen
         screen.fill(BLACK)
@@ -92,6 +97,27 @@ def visualize_space_colony():
                     )
                 )
                 screen.blit(text_surface, text_rect)
+
+        # Render stats in the top-right corner
+        stats = {
+            "Total Food": current_data["Total Food"],
+            "Total Iron": current_data["Total Iron"],
+            "Drill Health": current_data["Drill Health"],
+            "Drill Fuel": current_data["Drill Fuel"],
+            "Greenhouse Food": current_data["Greenhouse Food"],
+            "Miner Stamina": current_data["Miner Stamina"],
+            "Engineer Stamina": current_data["Engineer Stamina"],
+            "Farmer Stamina": current_data["Farmer Stamina"],
+        }
+
+        stats_x = screen_width - 150
+        stats_y = 10
+        line_spacing = 20
+
+        for i, (key, value) in enumerate(stats.items()):
+            stats_text = f"{key}: {value}"
+            stats_surface = stats_font.render(stats_text, True, WHITE)
+            screen.blit(stats_surface, (stats_x, stats_y + i * line_spacing))
 
         # Update the display
         pygame.display.flip()
