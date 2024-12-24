@@ -18,9 +18,13 @@ def visualize_space_colony():
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Space Colony Simulation")
 
-    # Load and scale the background image to fit one grid cell
-    bg_image = pygame.image.load("./assets/mars.png")
-    bg_image = pygame.transform.scale(bg_image, (cell_size, cell_size))
+    # Load and scale the day background image to fit one grid cell
+    bg_day_image = pygame.image.load("./assets/mars.png")
+    bg_day_image = pygame.transform.scale(bg_day_image, (cell_size, cell_size))
+
+    # Load and scale the night background image to fit one grid cell
+    bg_night_image = pygame.image.load("./assets/mars-night.jpg")
+    bg_night_image = pygame.transform.scale(bg_night_image, (cell_size, cell_size))
 
     # Load and scale the lifepod image to fit a 1x1 grid
     lifepod_image = pygame.image.load("./assets/lifepod.png")
@@ -71,6 +75,12 @@ def visualize_space_colony():
         # Get the current state of the model from the dataframe
         model_data = model.datacollector.get_model_vars_dataframe()
         current_data = model_data.iloc[-1]  # Get the latest row of data
+
+        # Determine if it's night
+        is_night = current_data["Is Night"]
+
+        # Choose the appropriate background image
+        bg_image = bg_night_image if is_night else bg_day_image
 
         # Clear the screen
         screen.fill(BLACK)
@@ -137,6 +147,7 @@ def visualize_space_colony():
             "Miner Stamina": current_data["Miner Stamina"],
             "Engineer Stamina": current_data["Engineer Stamina"],
             "Farmer Stamina": current_data["Farmer Stamina"],
+            "Is Night": "Yes" if is_night else "No",
         }
 
         stats_x = screen_width - 150
