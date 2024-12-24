@@ -24,7 +24,7 @@ class BaseHumanAgent(Agent):
 
         # Move the agent to the new position
         new_position = (x, y)
-        self.model.grid.place_agent(self, new_position)
+        self.model.grid.move_agent(self, new_position)
 
     def move(self):
         """Move to a random adjacent cell."""
