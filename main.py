@@ -18,6 +18,10 @@ def visualize_space_colony():
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Space Colony Simulation")
 
+    # Load and scale the background image to fit one grid cell
+    bg_image = pygame.image.load("./assets/mars.png")
+    bg_image = pygame.transform.scale(bg_image, (cell_size, cell_size))
+
     # Set the clock object for timing and framerate management
     clock = pygame.time.Clock()
 
@@ -44,6 +48,10 @@ def visualize_space_colony():
 
         # Draw the grid and agents
         for contents, (x, y) in model.grid.coord_iter():
+            # Draw the background image for the cell
+            screen.blit(bg_image, (x * cell_size, y * cell_size))
+
+            # Draw the agents in the cell
             for agent in contents:
                 # Determine the appropriate color and label for the agent
                 if type(agent).__name__ == "Farmer":
