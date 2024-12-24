@@ -1,5 +1,5 @@
-from base import BaseHumanAgent
-from structures import Lifepod, Greenhouse, Drill
+from agents.base import BaseHumanAgent
+from agents.structures import Lifepod, Greenhouse, Drill
 
 
 class Miner(BaseHumanAgent):
