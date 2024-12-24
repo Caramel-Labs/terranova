@@ -56,6 +56,9 @@ class Drill(Agent):
         self.iron = 0
         self.health = max_health
 
+    def step(self):
+        self.mine()
+
     def is_broken(self):
         """Check if the drill is broken (out of health or fuel)."""
         return (

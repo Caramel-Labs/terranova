@@ -5,6 +5,7 @@ class BaseHumanAgent(Agent):
     def __init__(self, model, stamina):
         super().__init__(model)
         self.stamina = stamina
+        self.inventory = 5
 
     def move_towards(self, target_pos):
         """Move towards the target position (target_pos is a tuple)."""
@@ -30,7 +31,9 @@ class BaseHumanAgent(Agent):
     def move(self):
         """Move randomly to a neighboring cell."""
         # Get all possible neighboring positions
-        possible_moves = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False)
+        possible_moves = self.model.grid.get_neighborhood(
+            self.pos, moore=True, include_center=False
+        )
         # Choose a random move from the available positions
         new_pos = self.random.choice(possible_moves)
         # Update the position on the grid
@@ -42,7 +45,9 @@ class BaseHumanAgent(Agent):
         max_stamina = 100  # Define maximum stamina
         if self.stamina < max_stamina:
             self.stamina = min(self.stamina + 10, max_stamina)
-            print(f"{type(self).__name__} resting. Stamina: {self.stamina}/{max_stamina}")
+            print(
+                f"{type(self).__name__} resting. Stamina: {self.stamina}/{max_stamina}"
+            )
 
     def step(self):
         """Define agent behavior during each step."""
@@ -52,7 +57,9 @@ class BaseHumanAgent(Agent):
             if self.pos != lifepod_pos:  # If not already at the lifepod
                 self.move_towards(lifepod_pos)
             else:
-                print(f"{type(self).__name__} resting at lifepod during night at {self.pos}.")
+                print(
+                    f"{type(self).__name__} resting at lifepod during night at {self.pos}."
+                )
                 self.rest()
         else:
             # Define day behavior in derived classes
