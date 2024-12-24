@@ -6,7 +6,7 @@ WIDTH = 20
 HEIGHT = 20
 
 # Size of a single cell
-CELL_SIZE = 48
+CELL_SIZE = 50
 
 # Initial count of zombies and humans when starting the simulation
 INITIAL_ZOMBIES = 5

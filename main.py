@@ -10,6 +10,14 @@ def visualize_space_colony():
     # Initialize PyGame
     pygame.init()
 
+    # Initialize the mixer for background music
+    pygame.mixer.init()
+
+    # Load and play the background music in a loop
+    pygame.mixer.music.load("./assets/music/music.mp3")
+    pygame.mixer.music.set_volume(0.5)  # Adjust volume as needed (0.0 to 1.0)
+    pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+
     cell_size = CELL_SIZE
     screen_width = WIDTH * cell_size
     screen_height = HEIGHT * cell_size
@@ -166,6 +174,9 @@ def visualize_space_colony():
 
         # Wait for 1 second before the next step
         clock.tick(1)
+
+    # Stop the music when done
+    pygame.mixer.music.stop()
 
     # Quit PyGame when done
     pygame.quit()
