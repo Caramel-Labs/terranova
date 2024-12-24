@@ -1,3 +1,6 @@
+"""This module is not in use right now.
+"""
+
 import pygame
 from settings import CELL_SIZE, WHITE
 
