@@ -6,7 +6,7 @@ from settings import WHITE, BLACK, FARMER_COLOR, MINER_COLOR
 from settings import LIFEPOD_COLOR, GREENHOUSE_COLOR, DRILL_COLOR
 
 
-def visualize_space_colony():
+def initialize_space_colony():
     # Initialize PyGame
     pygame.init()
 
@@ -35,7 +35,7 @@ def visualize_space_colony():
 
     # Initialize the display surface
     screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Space Colony Simulation")
+    pygame.display.set_caption("Terra Nova: the Mars Colonization Simulation")
 
     # --------------------------------------------
     # BACKGROUND IMAGES
@@ -253,7 +253,7 @@ def visualize_space_colony():
 
 
 def main():
-    visualize_space_colony()
+    initialize_space_colony()
 
 
 if __name__ == "__main__":
