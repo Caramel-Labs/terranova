@@ -2,7 +2,7 @@ import pygame
 from model import SpaceColony
 from settings import WIDTH, HEIGHT, CELL_SIZE
 from settings import STEPS
-from settings import WHITE, BLACK, FARMER_COLOR, MINER_COLOR, ENGINEER_COLOR
+from settings import WHITE, BLACK, FARMER_COLOR, MINER_COLOR
 from settings import LIFEPOD_COLOR, GREENHOUSE_COLOR, DRILL_COLOR
 
 
@@ -21,6 +21,30 @@ def visualize_space_colony():
     # Load and scale the background image to fit one grid cell
     bg_image = pygame.image.load("./assets/mars.png")
     bg_image = pygame.transform.scale(bg_image, (cell_size, cell_size))
+
+    # Load and scale the lifepod image to fit a 1x1 grid
+    lifepod_image = pygame.image.load("./assets/lifepod.png")
+    lifepod_image = pygame.transform.scale(lifepod_image, (cell_size, cell_size))
+
+    # Load and scale the drill image to fit a 1x1 grid
+    drill_image = pygame.image.load("./assets/drill.png")
+    drill_image = pygame.transform.scale(drill_image, (cell_size, cell_size))
+
+    # Load and scale the greenhouse image to fit a 1x1 grid
+    greenhouse_image = pygame.image.load("./assets/greenhouse.gif")
+    greenhouse_image = pygame.transform.scale(greenhouse_image, (cell_size, cell_size))
+
+    # Load and scale the engineer image to fit a 1x1 grid
+    engineer_image = pygame.image.load("./assets/engineer.webp")
+    engineer_image = pygame.transform.scale(engineer_image, (cell_size, cell_size))
+
+    # Load and scale the farmer image to fit a 1x1 grid
+    farmer_image = pygame.image.load("./assets/farmer.webp")
+    farmer_image = pygame.transform.scale(farmer_image, (cell_size, cell_size))
+
+    # Load and scale the miner image to fit a 1x1 grid
+    miner_image = pygame.image.load("./assets/miner.webp")
+    miner_image = pygame.transform.scale(miner_image, (cell_size, cell_size))
 
     # Set the clock object for timing and framerate management
     clock = pygame.time.Clock()
@@ -58,25 +82,30 @@ def visualize_space_colony():
 
             # Draw the agents in the cell
             for agent in contents:
-                # Determine the appropriate color and label for the agent
                 if type(agent).__name__ == "Farmer":
-                    color = FARMER_COLOR
-                    label = "F"
+                    # Draw the farmer image instead of a rectangle
+                    screen.blit(farmer_image, (x * cell_size, y * cell_size))
+                    continue
                 elif type(agent).__name__ == "Miner":
-                    color = MINER_COLOR
-                    label = "M"
+                    # Draw the miner image instead of a rectangle
+                    screen.blit(miner_image, (x * cell_size, y * cell_size))
+                    continue
                 elif type(agent).__name__ == "Engineer":
-                    color = ENGINEER_COLOR
-                    label = "E"
-                elif type(agent).__name__ == "Lifepod":
-                    color = LIFEPOD_COLOR
-                    label = "L"
+                    # Draw the engineer image instead of a rectangle
+                    screen.blit(engineer_image, (x * cell_size, y * cell_size))
+                    continue
                 elif type(agent).__name__ == "Greenhouse":
-                    color = GREENHOUSE_COLOR
-                    label = "G"
+                    # Draw the greenhouse image instead of a rectangle
+                    screen.blit(greenhouse_image, (x * cell_size, y * cell_size))
+                    continue
                 elif type(agent).__name__ == "Drill":
-                    color = DRILL_COLOR
-                    label = "D"
+                    # Draw the drill image instead of a rectangle
+                    screen.blit(drill_image, (x * cell_size, y * cell_size))
+                    continue
+                elif type(agent).__name__ == "Lifepod":
+                    # Draw the lifepod image instead of a rectangle
+                    screen.blit(lifepod_image, (x * cell_size, y * cell_size))
+                    continue
                 else:
                     color = WHITE  # Default color for unknown agents
                     label = "?"

@@ -1,12 +1,12 @@
 """Configurations for the PyGame simulation.
 """
 
-# Dimensions of the grid where zombies and humans live
-WIDTH = 40
-HEIGHT = 40
+# Dimensions of the grid
+WIDTH = 20
+HEIGHT = 20
 
 # Size of a single cell
-CELL_SIZE = 20
+CELL_SIZE = 48
 
 # Initial count of zombies and humans when starting the simulation
 INITIAL_ZOMBIES = 5
