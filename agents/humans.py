@@ -32,27 +32,6 @@ class Miner(BaseHumanAgent):
         else:
             self.rest()  # Rest when stamina is depleted
 
-    def move_towards(self, target_pos):  # Target position is the drill
-        """Move towards the target position (target_pos is a tuple)."""
-        x, y = self.pos
-        target_x, target_y = target_pos
-
-        # Move horizontally towards the target
-        if x < target_x:
-            x += 1  # Move right
-        elif x > target_x:
-            x -= 1  # Move left
-
-        # Move vertically towards the target
-        if y < target_y:
-            y += 1  # Move down
-        elif y > target_y:
-            y -= 1  # Move up
-
-        # Update the miner's position
-        self.pos = (x, y)
-        print(f"Miner moved to {self.pos}")
-
     def is_near_drill(self, drill):
         """Check if the miner is adjacent to the drill (within one step)."""
         return (
@@ -176,27 +155,6 @@ class Engineer(BaseHumanAgent):
         else:
             print(f"Drill at {drill.pos} is not broken.")
 
-    def move_towards(self, target_pos):
-        """Move towards a target position."""
-        x, y = self.pos
-        target_x, target_y = target_pos
-
-        # Determine the direction of movement (one step towards the target)
-        if x < target_x:
-            x += 1
-        elif x > target_x:
-            x -= 1
-
-        if y < target_y:
-            y += 1
-        elif y > target_y:
-            y -= 1
-
-        # Move the agent to the new position
-        new_position = (x, y)
-        self.model.grid.move_agent(self, new_position)
-        print(f"Engineer moved to {self.pos}.")
-
     def rest(self):
         """Regain stamina when resting."""
         super().rest()  # Call the base class's rest method
@@ -270,27 +228,6 @@ class Farmer(BaseHumanAgent):
     def near_greenhouse(self, greenhouse):
         """Check if the farmer is near a specific greenhouse."""
         return self.pos == greenhouse.pos
-
-    def move_towards(self, target_pos):
-        """Move towards the target position (target_pos is a tuple)."""
-        x, y = self.pos
-        target_x, target_y = target_pos
-
-        # Move horizontally towards the target
-        if x < target_x:
-            x += 1  # Move right
-        elif x > target_x:
-            x -= 1  # Move left
-
-        # Move vertically towards the target
-        if y < target_y:
-            y += 1  # Move down
-        elif y > target_y:
-            y -= 1  # Move up
-
-        # Update the farmer's position
-        self.pos = (x, y)
-        print(f"Farmer moved to {self.pos}")
 
     def get_lifepod(self):
         """Retrieve the Lifepod in the model."""
