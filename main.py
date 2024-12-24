@@ -3,21 +3,27 @@ from model import SpaceColony
 from settings import WIDTH, HEIGHT, CELL_SIZE
 from settings import STEPS
 from settings import WHITE, BLACK, FARMER_COLOR, MINER_COLOR
-from settings import LIFEPOD_COLOR, GREENHOUSE_COLOR, DRILL_COLOR, MUSIC
+from settings import LIFEPOD_COLOR, GREENHOUSE_COLOR, DRILL_COLOR
 
 
 def visualize_space_colony():
     # Initialize PyGame
     pygame.init()
 
-    # Initialize the mixer for background music (only if MUSIC is True)
-    if MUSIC:
-        pygame.mixer.init()
+    # Initialize the mixer for background music
+    pygame.mixer.init()
 
-        # Load and play the background music in a loop
-        pygame.mixer.music.load("./assets/music/music.mp3")
-        pygame.mixer.music.set_volume(0.5)  # Adjust volume as needed (0.0 to 1.0)
-        pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+    # Load and play the background music in a loop (initially set to play)
+    music_playing = True
+    pygame.mixer.music.load("./assets/music/music.mp3")
+    pygame.mixer.music.set_volume(0.5)  # Adjust volume as needed (0.0 to 1.0)
+    pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+
+    # Set up the mute/unmute button images
+    mute_image = pygame.image.load("./assets/buttons/mute.png")
+    mute_image = pygame.transform.scale(mute_image, (50, 50))
+    unmute_image = pygame.image.load("./assets/buttons/unmute.png")
+    unmute_image = pygame.transform.scale(unmute_image, (50, 50))
 
     cell_size = CELL_SIZE
     screen_width = WIDTH * cell_size
@@ -80,6 +86,17 @@ def visualize_space_colony():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            # Check for mouse clicks on the mute/unmute button
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = event.pos
+                # Check if the mute/unmute button is clicked
+                if 10 <= mouse_x <= 60 and 10 <= mouse_y <= 60:
+                    # Toggle the music state
+                    music_playing = not music_playing
+                    if music_playing:
+                        pygame.mixer.music.play(-1)
+                    else:
+                        pygame.mixer.music.stop()
 
         # Take a simulation step
         model.step()
@@ -170,15 +187,17 @@ def visualize_space_colony():
             stats_surface = stats_font.render(stats_text, True, WHITE)
             screen.blit(stats_surface, (stats_x, stats_y + i * line_spacing))
 
+        # Draw the mute/unmute button
+        if music_playing:
+            screen.blit(unmute_image, (10, 10))
+        else:
+            screen.blit(mute_image, (10, 10))
+
         # Update the display
         pygame.display.flip()
 
         # Wait for 1 second before the next step
         clock.tick(1)
-
-    # Stop the music when done (if MUSIC is True)
-    if MUSIC:
-        pygame.mixer.music.stop()
 
     # Quit PyGame when done
     pygame.quit()

@@ -2,8 +2,8 @@
 """
 
 # Dimensions of the grid
-WIDTH = 20
-HEIGHT = 20
+WIDTH = 16
+HEIGHT = 16
 
 # Size of a single cell
 CELL_SIZE = 50
