@@ -50,6 +50,10 @@ def visualize_space_colony():
     miner_image = pygame.image.load("./assets/miner.webp")
     miner_image = pygame.transform.scale(miner_image, (cell_size, cell_size))
 
+    # Load and scale the zzz image for nighttime effect
+    zzz_image = pygame.image.load("./assets/zzz.png")
+    zzz_image = pygame.transform.scale(zzz_image, (cell_size, cell_size))
+
     # Set the clock object for timing and framerate management
     clock = pygame.time.Clock()
 
@@ -85,6 +89,8 @@ def visualize_space_colony():
         # Clear the screen
         screen.fill(BLACK)
 
+        lifepod_positions = []  # Track lifepod positions for rendering effects
+
         # Draw the grid and agents
         for contents, (x, y) in model.grid.coord_iter():
             # Draw the background image for the cell
@@ -94,6 +100,8 @@ def visualize_space_colony():
             lifepod_present = any(
                 type(agent).__name__ == "Lifepod" for agent in contents
             )
+            if lifepod_present:
+                lifepod_positions.append((x, y))
 
             # Draw the agents in the cell
             for agent in contents:
@@ -122,6 +130,14 @@ def visualize_space_colony():
                 elif type(agent).__name__ == "Lifepod":
                     # Draw the lifepod image
                     screen.blit(lifepod_image, (x * cell_size, y * cell_size))
+
+        # Render the zzz image during nighttime diagonally top-right of Lifepods
+        if is_night:
+            for lifepod_x, lifepod_y in lifepod_positions:
+                zzz_x = lifepod_x + 1
+                zzz_y = lifepod_y - 1
+                if 0 <= zzz_x < WIDTH and 0 <= zzz_y < HEIGHT:
+                    screen.blit(zzz_image, (zzz_x * cell_size, zzz_y * cell_size))
 
         # Render stats in the top-right corner
         stats = {
