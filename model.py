@@ -12,7 +12,7 @@ class ZombieApocalypse(mesa.Model):
         super().__init__(seed=seed)
         self.num_humans = initial_humans
         self.num_zombies = initial_zombies
-        self.grid = MultiGrid(width, height, True)
+        self.grid = MultiGrid(width, height, False)
 
         # Create humans
         for i in range(self.num_humans):
