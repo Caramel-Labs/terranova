@@ -1,12 +1,12 @@
 import pygame
-from model import ZombieApocalypse
+from model import SpaceColony
 from settings import WIDTH, HEIGHT, CELL_SIZE
-from settings import INITIAL_ZOMBIES, INITIAL_HUMANS, STEPS
-from settings import WHITE, BLACK, HUMAN_COLOR, ZOMBIE_COLOR
-from settings import BACKGROUND_IMAGE_PATH, HUMAN_IMAGE_PATH, ZOMBIE_IMAGE_PATH
+from settings import STEPS
+from settings import WHITE, BLACK, FARMER_COLOR, MINER_COLOR, ENGINEER_COLOR
+from settings import LIFEPOD_COLOR, GREENHOUSE_COLOR, DRILL_COLOR
 
 
-def visualize_simulation():
+def visualize_space_colony():
     # Initialize PyGame
     pygame.init()
 
@@ -16,30 +16,13 @@ def visualize_simulation():
 
     # Initialize the display surface
     screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Zombie Apocalypse Simulation")
-
-    # Load the background texture
-    background_texture = pygame.image.load(BACKGROUND_IMAGE_PATH)
-    background_texture = pygame.transform.scale(
-        background_texture, (cell_size, cell_size)
-    )
-
-    # Load images for zombies and humans
-    zombie_image = pygame.image.load(ZOMBIE_IMAGE_PATH)
-    human_image = pygame.image.load(HUMAN_IMAGE_PATH)
-    zombie_image = pygame.transform.scale(zombie_image, (cell_size, cell_size))
-    human_image = pygame.transform.scale(human_image, (cell_size, cell_size))
+    pygame.display.set_caption("Space Colony Simulation")
 
     # Set the clock object for timing and framerate management
     clock = pygame.time.Clock()
 
     # Initialize the simulation model
-    model = ZombieApocalypse(
-        width=WIDTH,
-        height=HEIGHT,
-        initial_zombies=INITIAL_ZOMBIES,
-        initial_humans=INITIAL_HUMANS,
-    )
+    model = SpaceColony(width=WIDTH, height=HEIGHT)
 
     # Main game loop
     running = True
@@ -53,20 +36,34 @@ def visualize_simulation():
         model.step()
         step_count += 1
 
-        # Draw the tiled background
-        for y in range(0, screen_height, cell_size):
-            for x in range(0, screen_width, cell_size):
-                screen.blit(background_texture, (x, y))
+        # Clear the screen
+        screen.fill(BLACK)
 
         # Draw the grid and agents
         for contents, (x, y) in model.grid.coord_iter():
-            if contents:
-                for agent in contents:
-                    # Determine the appropriate image for the agent
-                    if type(agent).__name__ == "HumanAgent":
-                        screen.blit(human_image, (x * cell_size, y * cell_size))
-                    elif type(agent).__name__ == "ZombieAgent":
-                        screen.blit(zombie_image, (x * cell_size, y * cell_size))
+            for agent in contents:
+                # Determine the appropriate color for the agent
+                if type(agent).__name__ == "Farmer":
+                    color = FARMER_COLOR
+                elif type(agent).__name__ == "Miner":
+                    color = MINER_COLOR
+                elif type(agent).__name__ == "Engineer":
+                    color = ENGINEER_COLOR
+                elif type(agent).__name__ == "Lifepod":
+                    color = LIFEPOD_COLOR
+                elif type(agent).__name__ == "Greenhouse":
+                    color = GREENHOUSE_COLOR
+                elif type(agent).__name__ == "Drill":
+                    color = DRILL_COLOR
+                else:
+                    color = WHITE  # Default color for unknown agents
+
+                # Draw the rectangle for the agent
+                pygame.draw.rect(
+                    screen,
+                    color,
+                    (x * cell_size, y * cell_size, cell_size, cell_size),
+                )
 
         # Update the display
         pygame.display.flip()
@@ -79,7 +76,7 @@ def visualize_simulation():
 
 
 def main():
-    visualize_simulation()
+    visualize_space_colony()
 
 
 if __name__ == "__main__":
