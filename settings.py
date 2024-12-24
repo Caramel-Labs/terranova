@@ -2,11 +2,11 @@
 """
 
 # Dimensions of the grid
-WIDTH = 20
-HEIGHT = 20
+WIDTH = 16
+HEIGHT = 16
 
 # Size of a single cell
-CELL_SIZE = 48
+CELL_SIZE = 50
 
 # Initial count of zombies and humans when starting the simulation
 INITIAL_ZOMBIES = 5
@@ -32,3 +32,6 @@ DRILL_COLOR = (255, 165, 0)  # Orange for drills
 BACKGROUND_IMAGE_PATH = "./assets/blackbg.jpg"
 HUMAN_IMAGE_PATH = "./assets/human.png"
 ZOMBIE_IMAGE_PATH = "./assets/zombie.png"
+
+# Music settings
+MUSIC = True
