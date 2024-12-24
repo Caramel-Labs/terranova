@@ -16,8 +16,8 @@ class SpaceColony(Model):
         self.strike_probability = 0.1  # Chance of a storm each step
 
         # Randomly generate storms
-        if self.random.random() < self.strike_probability:
-            strike = AsteroidStrike("AsteroidStrike", self, duration=8)
+        if 0.1 < self.strike_probability:
+            strike = AsteroidStrike("AsteroidStrike", self, duration=3)
 
         # Set lifepod location at the center of the grid
         self.lifepod_location = (width // 2, height // 2)

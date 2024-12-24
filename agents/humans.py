@@ -22,7 +22,7 @@ class Miner(BaseHumanAgent):
                         f"Miner at {self.pos} is staying at the Lifepod during the night."
                     )
         else:  # Daytime actions
-            if self.stamina > 0:
+            if self.stamina > 0 and self.iron != self.inventory:
                 nearest_drill = self.find_nearest_drill()
 
                 if nearest_drill:
@@ -33,7 +33,7 @@ class Miner(BaseHumanAgent):
                     # Check if miner is within one step of the drill
                     if self.is_near_drill(nearest_drill):
                         print(
-                            f"Miner is near the drill at {nearest_drill.pos}. Starting to mine."
+                            f"Miner is near the drill at {nearest_drill.pos}. Starting to collect."
                         )
                         self.use_drill(nearest_drill)
                     else:
@@ -42,6 +42,9 @@ class Miner(BaseHumanAgent):
                 else:
                     print("No drill found.")
                     self.rest()  # If no drill is found, the miner rests
+            elif self.stamina > 0 and self.iron == self.inventory:
+                lifepod = self.get_lifepod()
+                self.move_towards(lifepod.pos)
             else:
                 self.rest()  # Rest when stamina is depleted
 
@@ -93,13 +96,14 @@ class Miner(BaseHumanAgent):
                 print("Inventory full. Returning to the Lifepod.")
                 lifepod = self.get_lifepod()
                 if lifepod:
-                    self.move_towards(lifepod.pos)  # Move the miner back to the Lifepod
-                    lifepod.store_iron(
-                        self.iron
-                    )  # Store all collected iron in the Lifepod
-                    print(f"Stored {self.iron} iron in the Lifepod.")
-                    self.iron = 0  # Reset the miner's iron after storing it
-
+                    # Move towards the Lifepod
+                    if self.pos != lifepod.pos:
+                        self.move_towards(lifepod.pos)
+                    else:
+                        # Store iron only when at the Lifepod's position
+                        lifepod.store_iron(self.iron)
+                        print(f"Stored {self.iron} iron in the Lifepod.")
+                        self.iron = 0  # Reset the miner's iron after storing it
             self.stamina -= 10  # Miner consumes stamina each time they collect iron
         else:
             print("Drill cannot be used due to lack of fuel or health.")
@@ -252,14 +256,16 @@ class Farmer(BaseHumanAgent):
                 print("Inventory full. Returning to the Lifepod.")
                 lifepod = self.get_lifepod()
                 if lifepod:
-                    self.move_towards(
-                        lifepod.pos
-                    )  # Move the farmer back to the Lifepod
-                    lifepod.store_food(
-                        self.food
-                    )  # Store all collected food in the Lifepod
-                    print(f"Stored {self.food} food in the Lifepod.")
-                    self.food = 0  # Reset the farmer's food inventory after storing it
+                    # Move towards the Lifepod
+                    if self.pos != lifepod.pos:
+                        self.move_towards(lifepod.pos)
+                    else:
+                        # Store food only when at the Lifepod's position
+                        lifepod.store_food(self.food)
+                        print(f"Stored {self.food} food in the Lifepod.")
+                        self.food = (
+                            0  # Reset the farmer's food inventory after storing it
+                        )
 
             # Decrease stamina for collecting food
             self.stamina = max(self.stamina - 5, 0)
