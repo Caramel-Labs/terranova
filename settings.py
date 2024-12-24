@@ -32,3 +32,6 @@ DRILL_COLOR = (255, 165, 0)  # Orange for drills
 BACKGROUND_IMAGE_PATH = "./assets/blackbg.jpg"
 HUMAN_IMAGE_PATH = "./assets/human.png"
 ZOMBIE_IMAGE_PATH = "./assets/zombie.png"
+
+# Music settings
+MUSIC = True
