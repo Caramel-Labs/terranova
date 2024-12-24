@@ -1,3 +1,6 @@
+"""Configurations for the PyGame simulation.
+"""
+
 # Dimensions of the grid where zombies and humans live
 WIDTH = 40
 HEIGHT = 40
