@@ -1,7 +1,7 @@
 import pygame
 from model import SpaceColony
-from settings import WIDTH, HEIGHT, CELL_SIZE
 from settings import STEPS
+from settings import WIDTH, HEIGHT, CELL_SIZE
 from settings import WHITE, BLACK, FARMER_COLOR, MINER_COLOR
 from settings import LIFEPOD_COLOR, GREENHOUSE_COLOR, DRILL_COLOR
 
@@ -9,6 +9,10 @@ from settings import LIFEPOD_COLOR, GREENHOUSE_COLOR, DRILL_COLOR
 def visualize_space_colony():
     # Initialize PyGame
     pygame.init()
+
+    # --------------------------------------------
+    # MUSIC AND SFX
+    # --------------------------------------------
 
     # Initialize the mixer for background music
     pygame.mixer.init()
@@ -33,6 +37,10 @@ def visualize_space_colony():
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Space Colony Simulation")
 
+    # --------------------------------------------
+    # BACKGROUND IMAGES
+    # --------------------------------------------
+
     # Load and scale the day background image to fit one grid cell
     bg_day_image = pygame.image.load("./assets/mars.png")
     bg_day_image = pygame.transform.scale(bg_day_image, (cell_size, cell_size))
@@ -40,6 +48,10 @@ def visualize_space_colony():
     # Load and scale the night background image to fit one grid cell
     bg_night_image = pygame.image.load("./assets/mars-night.jpg")
     bg_night_image = pygame.transform.scale(bg_night_image, (cell_size, cell_size))
+
+    # --------------------------------------------
+    # STRUCTURE IMAGES
+    # --------------------------------------------
 
     # Load and scale the lifepod image to fit a 1x1 grid
     lifepod_image = pygame.image.load("./assets/lifepod.png")
@@ -53,6 +65,10 @@ def visualize_space_colony():
     greenhouse_image = pygame.image.load("./assets/greenhouse.gif")
     greenhouse_image = pygame.transform.scale(greenhouse_image, (cell_size, cell_size))
 
+    # --------------------------------------------
+    # HUMAN IMAGES
+    # --------------------------------------------
+
     # Load and scale the engineer image to fit a 1x1 grid
     engineer_image = pygame.image.load("./assets/engineer.webp")
     engineer_image = pygame.transform.scale(engineer_image, (cell_size, cell_size))
@@ -65,9 +81,23 @@ def visualize_space_colony():
     miner_image = pygame.image.load("./assets/miner.webp")
     miner_image = pygame.transform.scale(miner_image, (cell_size, cell_size))
 
+    # --------------------------------------------
+    # OTHER IMAGES
+    # --------------------------------------------
+
     # Load and scale the zzz image for nighttime effect
     zzz_image = pygame.image.load("./assets/zzz.png")
     zzz_image = pygame.transform.scale(zzz_image, (cell_size, cell_size))
+
+    # Load and scale the asteroid strike image to fit a 1x1 grid
+    asteroid_strike_image = pygame.image.load("./assets/mars-red.png")
+    asteroid_strike_image = pygame.transform.scale(
+        asteroid_strike_image, (cell_size, cell_size)
+    )
+
+    # --------------------------------------------
+    # OTHER CONFIGURATIONS
+    # --------------------------------------------
 
     # Set the clock object for timing and framerate management
     clock = pygame.time.Clock()
@@ -79,10 +109,17 @@ def visualize_space_colony():
     font = pygame.font.Font(None, 24)
     stats_font = pygame.font.Font(None, 20)
 
-    # Main game loop
+    # --------------------------------------------
+    # MAIN GAME LOOP
+    # --------------------------------------------
+
     running = True
     step_count = 0
     while running and step_count < STEPS:
+        # --------------------------------------------
+        # EVENT LOOP IMAGES
+        # --------------------------------------------
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -117,6 +154,10 @@ def visualize_space_colony():
 
         lifepod_positions = []  # Track lifepod positions for rendering effects
 
+        # --------------------------------------------
+        # RENDERING GRAPHICS
+        # --------------------------------------------
+
         # Draw the grid and agents
         for contents, (x, y) in model.grid.coord_iter():
             # Draw the background image for the cell
@@ -128,6 +169,11 @@ def visualize_space_colony():
             )
             if lifepod_present:
                 lifepod_positions.append((x, y))
+
+            # Check if an AsteroidStrike is present in the cell
+            asteroid_strike_present = any(
+                type(agent).__name__ == "AsteroidStrike" for agent in contents
+            )
 
             # Draw the agents in the cell
             for agent in contents:
@@ -156,6 +202,9 @@ def visualize_space_colony():
                 elif type(agent).__name__ == "Lifepod":
                     # Draw the lifepod image
                     screen.blit(lifepod_image, (x * cell_size, y * cell_size))
+                elif type(agent).__name__ == "AsteroidStrike":
+                    # Draw the asteroid strike image
+                    screen.blit(asteroid_strike_image, (x * cell_size, y * cell_size))
 
         # Render the zzz image during nighttime diagonally top-right of Lifepods
         if is_night:
