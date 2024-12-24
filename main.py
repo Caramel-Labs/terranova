@@ -90,52 +90,38 @@ def visualize_space_colony():
             # Draw the background image for the cell
             screen.blit(bg_image, (x * cell_size, y * cell_size))
 
+            # Check if a Lifepod is present in the cell
+            lifepod_present = any(
+                type(agent).__name__ == "Lifepod" for agent in contents
+            )
+
             # Draw the agents in the cell
             for agent in contents:
-                if type(agent).__name__ == "Farmer":
-                    # Draw the farmer image instead of a rectangle
+                if lifepod_present and type(agent).__name__ in [
+                    "Farmer",
+                    "Miner",
+                    "Engineer",
+                ]:
+                    # Skip rendering human images if Lifepod is present
+                    continue
+                elif type(agent).__name__ == "Farmer":
+                    # Draw the farmer image
                     screen.blit(farmer_image, (x * cell_size, y * cell_size))
-                    continue
                 elif type(agent).__name__ == "Miner":
-                    # Draw the miner image instead of a rectangle
+                    # Draw the miner image
                     screen.blit(miner_image, (x * cell_size, y * cell_size))
-                    continue
                 elif type(agent).__name__ == "Engineer":
-                    # Draw the engineer image instead of a rectangle
+                    # Draw the engineer image
                     screen.blit(engineer_image, (x * cell_size, y * cell_size))
-                    continue
                 elif type(agent).__name__ == "Greenhouse":
-                    # Draw the greenhouse image instead of a rectangle
+                    # Draw the greenhouse image
                     screen.blit(greenhouse_image, (x * cell_size, y * cell_size))
-                    continue
                 elif type(agent).__name__ == "Drill":
-                    # Draw the drill image instead of a rectangle
+                    # Draw the drill image
                     screen.blit(drill_image, (x * cell_size, y * cell_size))
-                    continue
                 elif type(agent).__name__ == "Lifepod":
-                    # Draw the lifepod image instead of a rectangle
+                    # Draw the lifepod image
                     screen.blit(lifepod_image, (x * cell_size, y * cell_size))
-                    continue
-                else:
-                    color = WHITE  # Default color for unknown agents
-                    label = "?"
-
-                # Draw the rectangle for the agent
-                pygame.draw.rect(
-                    screen,
-                    color,
-                    (x * cell_size, y * cell_size, cell_size, cell_size),
-                )
-
-                # Render the label and blit it onto the rectangle
-                text_surface = font.render(label, True, BLACK)
-                text_rect = text_surface.get_rect(
-                    center=(
-                        x * cell_size + cell_size // 2,
-                        y * cell_size + cell_size // 2,
-                    )
-                )
-                screen.blit(text_surface, text_rect)
 
         # Render stats in the top-right corner
         stats = {
