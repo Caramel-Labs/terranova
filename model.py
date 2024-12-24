@@ -3,7 +3,7 @@ from mesa.space import MultiGrid
 from legacy_agents import HumanAgent, ZombieAgent
 from mesa.datacollection import DataCollector
 from agents.humans import Engineer, Farmer, Miner
-from agents.environment import Storm
+from agents.environment import AsteroidStrike
 from agents.structures import Lifepod, Greenhouse, Drill
 
 
@@ -13,12 +13,11 @@ class SpaceColony(Model):
     def __init__(self, width, height, seed=69):
         super().__init__(seed=seed)
         self.grid = MultiGrid(width, height, False)
-        self.storm_probability = 0.1  # Chance of a storm each step
+        self.strike_probability = 0.1  # Chance of a storm each step
 
         # Randomly generate storms
-        if self.random.random() < self.storm_probability:
-            storm = Storm("Storm", self, duration=8)
-            self.grid.place_agent(storm, self.random_position())
+        if self.random.random() < self.strike_probability:
+            strike = AsteroidStrike("AsteroidStrike", self, duration=8)
 
         # Set lifepod location at the center of the grid
         self.lifepod_location = (width // 2, height // 2)
