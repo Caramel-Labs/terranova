@@ -1,4 +1,3 @@
-import mesa
 from mesa import Agent, Model
 from mesa.space import MultiGrid
 from legacy_agents import HumanAgent, ZombieAgent
@@ -8,7 +7,7 @@ from agents.structures import Lifepod, Greenhouse, Drill
 
 
 class SpaceColony(Model):
-    """The goddamn model"""
+    """The Mesa model for the space colony."""
 
     def __init__(self, width, height, seed=69):
         super().__init__(seed=seed)
