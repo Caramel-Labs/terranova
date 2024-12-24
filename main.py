@@ -24,6 +24,9 @@ def visualize_space_colony():
     # Initialize the simulation model
     model = SpaceColony(width=WIDTH, height=HEIGHT)
 
+    # Set up the font for rendering text
+    font = pygame.font.Font(None, cell_size - 4)
+
     # Main game loop
     running = True
     step_count = 0
@@ -42,21 +45,28 @@ def visualize_space_colony():
         # Draw the grid and agents
         for contents, (x, y) in model.grid.coord_iter():
             for agent in contents:
-                # Determine the appropriate color for the agent
+                # Determine the appropriate color and label for the agent
                 if type(agent).__name__ == "Farmer":
                     color = FARMER_COLOR
+                    label = "F"
                 elif type(agent).__name__ == "Miner":
                     color = MINER_COLOR
+                    label = "M"
                 elif type(agent).__name__ == "Engineer":
                     color = ENGINEER_COLOR
+                    label = "E"
                 elif type(agent).__name__ == "Lifepod":
                     color = LIFEPOD_COLOR
+                    label = "L"
                 elif type(agent).__name__ == "Greenhouse":
                     color = GREENHOUSE_COLOR
+                    label = "G"
                 elif type(agent).__name__ == "Drill":
                     color = DRILL_COLOR
+                    label = "D"
                 else:
                     color = WHITE  # Default color for unknown agents
+                    label = "?"
 
                 # Draw the rectangle for the agent
                 pygame.draw.rect(
@@ -64,6 +74,16 @@ def visualize_space_colony():
                     color,
                     (x * cell_size, y * cell_size, cell_size, cell_size),
                 )
+
+                # Render the label and blit it onto the rectangle
+                text_surface = font.render(label, True, BLACK)
+                text_rect = text_surface.get_rect(
+                    center=(
+                        x * cell_size + cell_size // 2,
+                        y * cell_size + cell_size // 2,
+                    )
+                )
+                screen.blit(text_surface, text_rect)
 
         # Update the display
         pygame.display.flip()
