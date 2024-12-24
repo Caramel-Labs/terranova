@@ -1,6 +1,6 @@
 from mesa import Agent, Model
 from mesa.space import MultiGrid
-from legacy_agents import HumanAgent, ZombieAgent
+from legacy.legacy_agents import HumanAgent, ZombieAgent
 from mesa.datacollection import DataCollector
 from agents.humans import Engineer, Farmer, Miner
 from agents.environment import AsteroidStrike
