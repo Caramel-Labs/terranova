@@ -117,7 +117,7 @@ def visualize_space_colony():
     step_count = 0
     while running and step_count < STEPS:
         # --------------------------------------------
-        # EVENT LOOP IMAGES
+        # EVENT LOOP
         # --------------------------------------------
 
         for event in pygame.event.get():
