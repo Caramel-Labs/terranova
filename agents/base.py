@@ -26,7 +26,6 @@ class BaseHumanAgent(Agent):
 
         # Update the position on the grid
         self.model.grid.move_agent(self, (x, y))
-        print(f"{type(self).__name__} moved to {self.pos}.")
 
     def move(self):
         """Move randomly to a neighboring cell."""
@@ -38,29 +37,25 @@ class BaseHumanAgent(Agent):
         new_pos = self.random.choice(possible_moves)
         # Update the position on the grid
         self.model.grid.move_agent(self, new_pos)
-        print(f"{type(self).__name__} moved to {new_pos}.")
 
     def rest(self):
         """Rest to regain stamina."""
         max_stamina = 100  # Define maximum stamina
         if self.stamina < max_stamina:
             self.stamina = min(self.stamina + 10, max_stamina)
-            print(
-                f"{type(self).__name__} resting. Stamina: {self.stamina}/{max_stamina}"
-            )
 
     def step(self):
         """Define agent behavior during each step."""
-        if self.model.is_night:
-            # Move towards the lifepod if it's night
+        if self.stamina <= 0:  # If stamina is depleted, rest until fully restored
+            self.rest()
+        elif self.stamina < 100:  # Continue resting if stamina is not full
+            self.rest()
+        elif self.model.is_night:  # Nighttime behavior
             lifepod_pos = self.model.lifepod_location
             if self.pos != lifepod_pos:  # If not already at the lifepod
                 self.move_towards(lifepod_pos)
             else:
-                print(
-                    f"{type(self).__name__} resting at lifepod during night at {self.pos}."
-                )
-                self.rest()
+                self.rest()  # Rest at the lifepod during the night
         else:
             # Define day behavior in derived classes
-            print(f"{type(self).__name__} acting during the day.")
+            pass  # To be implemented by specific agents

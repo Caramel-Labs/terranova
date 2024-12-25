@@ -62,7 +62,7 @@ class Miner(BaseHumanAgent):
             iron_to_collect = min(self.inventory - self.iron, drill.iron)
             self.iron += iron_to_collect
             drill.iron -= iron_to_collect
-            self.stamina -= 10  # Mining consumes stamina
+            self.stamina -= 30  # Mining consumes stamina
 
     def get_lifepod(self):
         """Retrieve the Lifepod in the model."""
@@ -188,7 +188,7 @@ class Farmer(BaseHumanAgent):
             food_to_collect = min(self.inventory - self.food, greenhouse.food)
             self.food += food_to_collect
             greenhouse.food -= food_to_collect
-            self.stamina = max(self.stamina - 5, 0)  # Decrease stamina for collecting food
+            self.stamina = max(self.stamina - 10, 0)  # Decrease stamina for collecting food
 
     def find_nearest_greenhouse(self):
         """Find the nearest greenhouse on the grid."""
