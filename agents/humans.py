@@ -32,7 +32,12 @@ class Miner(BaseHumanAgent):
                             f"Miner is near the drill at {nearest_drill.pos}. Starting to collect."
                         )
                         self.use_drill(nearest_drill)
-
+                    else:
+                        # Move towards the drill
+                        self.move_towards(nearest_drill.pos)
+                else:
+                    print("No drill found.")
+                    self.rest()  # If no drill is found, the miner rests
             elif self.stamina > 0 and self.iron == self.inventory:
                 # Move towards the lifepod to store iron
                 if lifepod and self.pos != lifepod.pos:
