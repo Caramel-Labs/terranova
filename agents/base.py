@@ -1,4 +1,5 @@
 from mesa import Agent
+from agents.structures import Lifepod
 
 
 class BaseHumanAgent(Agent):
@@ -38,24 +39,31 @@ class BaseHumanAgent(Agent):
         # Update the position on the grid
         self.model.grid.move_agent(self, new_pos)
 
+    def get_lifepod(self):
+        """Retrieve the Lifepod in the model."""
+        for agent in self.model.agents:
+            if isinstance(agent, Lifepod):
+                return agent
+        return None
+
     def rest(self):
         """Rest to regain stamina."""
         max_stamina = 100  # Define maximum stamina
-        if self.stamina < max_stamina:
-            self.stamina = min(self.stamina + 10, max_stamina)
+        lifepod = self.get_lifepod()
+
+        if lifepod:
+            if self.pos != lifepod.pos:  # Move to the lifepod if not already there
+                self.move_towards(lifepod.pos)
+            else:
+                if self.stamina < max_stamina:
+                    self.stamina = min(self.stamina + 10, max_stamina)
+                    print(
+                        f"Agent at {self.pos} is staying at the Lifepod during the night."
+                    )
 
     def step(self):
         """Define agent behavior during each step."""
         if self.stamina <= 0:  # If stamina is depleted, rest until fully restored
             self.rest()
-        elif self.stamina < 100:  # Continue resting if stamina is not full
-            self.rest()
-        elif self.model.is_night:  # Nighttime behavior
-            lifepod_pos = self.model.lifepod_location
-            if self.pos != lifepod_pos:  # If not already at the lifepod
-                self.move_towards(lifepod_pos)
-            else:
-                self.rest()  # Rest at the lifepod during the night
         else:
-            # Define day behavior in derived classes
             pass  # To be implemented by specific agents

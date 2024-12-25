@@ -9,17 +9,11 @@ class Miner(BaseHumanAgent):
 
     def step(self):
         """Perform the miner's actions for each step."""
-        lifepod = self.get_lifepod()
 
         if self.model.is_night:  # Nighttime behavior
-            if lifepod:
-                if self.pos != lifepod.pos:  # Move to the lifepod if not already there
-                    self.move_towards(lifepod.pos)
-                else:
-                    print(
-                        f"Miner at {self.pos} is staying at the Lifepod during the night."
-                    )
+            self.rest()
         else:  # Daytime actions
+            lifepod = self.get_lifepod()
             if self.stamina > 0 and self.iron != self.inventory:
                 nearest_drill = self.find_nearest_drill()
                 if nearest_drill:
@@ -104,13 +98,6 @@ class Miner(BaseHumanAgent):
             f"Miner at {self.pos} is resting to regain stamina."
         )  # Print when the miner is resting
 
-    def get_lifepod(self):
-        """Retrieve the Lifepod in the model."""
-        for agent in self.model.agents:
-            if isinstance(agent, Lifepod):
-                return agent
-        return None
-
 
 class Engineer(BaseHumanAgent):
     def __init__(self, model, stamina=50):
@@ -120,8 +107,7 @@ class Engineer(BaseHumanAgent):
     def step(self):
         """Define the engineer's actions for each step."""
         if self.model.is_night:  # Follow the BaseAgent's night behavior
-            super().step()
-            return
+            self.rest()
 
         if self.stamina > 0:
             # Check for a nearby broken drill and move towards it if necessary
@@ -193,16 +179,8 @@ class Farmer(BaseHumanAgent):
 
     def step(self):
         """Define the farmer's behavior for each step."""
-        lifepod = self.get_lifepod()
-
         if self.model.is_night:  # Nighttime behavior
-            if lifepod:
-                if self.pos != lifepod.pos:  # Move to the lifepod if not already there
-                    self.move_towards(lifepod.pos)
-                else:
-                    print(
-                        f"Farmer at {self.pos} is staying at the Lifepod during the night."
-                    )
+            self.rest()
         else:  # Daytime actions
             lifepod = self.get_lifepod()  # Ensure lifepod is fetched
             if self.stamina > 0 and self.food != self.inventory:
@@ -269,13 +247,3 @@ class Farmer(BaseHumanAgent):
     def near_greenhouse(self, greenhouse):
         """Check if the farmer is near a specific greenhouse."""
         return self.pos == greenhouse.pos
-
-    def get_lifepod(self):
-        """Retrieve the Lifepod in the model."""
-        for agent in self.model.agents:
-            if isinstance(agent, Lifepod):
-                return agent
-        return None
-
-    # Use the rest method from BaseAgent
-    # No need to redefine rest() since it's already handled by BaseAgent
