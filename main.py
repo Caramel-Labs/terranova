@@ -92,7 +92,7 @@ def initialize_space_colony():
     zzz_image = pygame.transform.scale(zzz_image, (cell_size, cell_size))
 
     # Load and scale the asteroid strike image to fit a 1x1 grid
-    asteroid_strike_image = pygame.image.load("./assets/mars-red.png")
+    asteroid_strike_image = pygame.image.load("./assets/asteroid1.png")
     asteroid_strike_image = pygame.transform.scale(
         asteroid_strike_image, (cell_size, cell_size)
     )
