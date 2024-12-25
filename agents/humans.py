@@ -109,7 +109,7 @@ class Engineer(BaseHumanAgent):
         if self.model.is_night:  # Follow the BaseAgent's night behavior
             self.rest()
 
-        if self.stamina > 0:
+        elif self.stamina > 0:
             # Check for a nearby broken drill and move towards it if necessary
             nearest_broken_drill = self.find_nearest_broken_drill()
             if nearest_broken_drill:
