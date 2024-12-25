@@ -27,7 +27,7 @@ class Lifepod(Agent):
 
 
 class Greenhouse(Agent):
-    def __init__(self, model, max_food=100, food_add_rate=10):
+    def __init__(self, model, max_food=100, food_add_rate=2):
         super().__init__(model)
         self.food = 0
         self.max_food = max_food
@@ -75,7 +75,7 @@ class Drill(Agent):
         if not self.is_broken():
             # Perform mining if the drill is functional
             self.fuel -= 1  # Decrease fuel
-            self.iron += 3  # Increase iron
+            self.iron += 2  # Increase iron
             self.health = max(
                 0, self.health - 1
             )  # Decrease health, ensure it's non-negative
