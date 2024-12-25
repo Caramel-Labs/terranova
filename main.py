@@ -94,6 +94,10 @@ def initialize_space_colony():
     asteroid_strike_image = pygame.transform.scale(
         asteroid_strike_image, (cell_size, cell_size)
     )
+    blast_frames = [
+        pygame.image.load(f"./assets/zombie.png") for i in range(1, 6)
+    ]
+    blast_frames = [pygame.transform.scale(frame, (cell_size, cell_size)) for frame in blast_frames]
 
     # --------------------------------------------
     # OTHER CONFIGURATIONS
@@ -187,24 +191,31 @@ def initialize_space_colony():
                 elif type(agent).__name__ == "Farmer":
                     # Draw the farmer image
                     screen.blit(farmer_image, (x * cell_size, y * cell_size))
+                    draw_stamina_bar(screen, agent.stamina, x, y, cell_size)
                 elif type(agent).__name__ == "Miner":
                     # Draw the miner image
                     screen.blit(miner_image, (x * cell_size, y * cell_size))
+                    draw_stamina_bar(screen, agent.stamina, x, y, cell_size)
                 elif type(agent).__name__ == "Engineer":
                     # Draw the engineer image
                     screen.blit(engineer_image, (x * cell_size, y * cell_size))
+                    draw_stamina_bar(screen, agent.stamina, x, y, cell_size)
                 elif type(agent).__name__ == "Greenhouse":
                     # Draw the greenhouse image
                     screen.blit(greenhouse_image, (x * cell_size, y * cell_size))
+                    draw_stamina_bar(screen, agent.food, x, y, cell_size)
                 elif type(agent).__name__ == "Drill":
                     # Draw the drill image
                     screen.blit(drill_image, (x * cell_size, y * cell_size))
+                    draw_stamina_bar(screen, agent.fuel, x, y, cell_size)
                 elif type(agent).__name__ == "Lifepod":
                     # Draw the lifepod image
                     screen.blit(lifepod_image, (x * cell_size, y * cell_size))
                 elif type(agent).__name__ == "AsteroidStrike":
                     # Draw the asteroid strike image
                     screen.blit(asteroid_strike_image, (x * cell_size, y * cell_size))
+                    # Play the blasting animation
+                    #draw_blast_animation(screen, x, y, blast_frames, cell_size, clock)
 
         # Render the zzz image during nighttime diagonally top-right of Lifepods
         if is_night:
@@ -250,6 +261,32 @@ def initialize_space_colony():
 
     # Quit PyGame when done
     pygame.quit()
+
+
+# --------------------------------------------
+# STAMINA BAR
+# --------------------------------------------
+def draw_stamina_bar(screen, value, x, y, cell_size):
+    bar_width = cell_size
+    bar_height = 5
+    bar_x = x * cell_size
+    bar_y = y * cell_size - bar_height - 2  # Draw above the agent
+
+    # Background bar (black)
+    pygame.draw.rect(screen, BLACK, (bar_x, bar_y, bar_width, bar_height))
+
+    # Filled portion (green)
+    filled_width = int(bar_width * (value/100))
+    pygame.draw.rect(screen, (255,245,34), (bar_x, bar_y, filled_width, bar_height))
+
+
+#blast animation
+def draw_blast_animation(screen, x, y, frames, cell_size, clock, duration=0.5):
+    frame_time = duration / len(frames)
+    for frame in frames:
+        screen.blit(frame, (x * cell_size, y * cell_size))
+        pygame.display.flip()
+        clock.tick(int(1 / frame_time))
 
 
 def main():
