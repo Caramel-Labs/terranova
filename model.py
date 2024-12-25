@@ -15,10 +15,6 @@ class SpaceColony(Model):
         self.grid = MultiGrid(width, height, False)
         self.strike_probability = 0.1  # Chance of a storm each step
 
-        # Randomly generate storms
-        if 0.1 < self.strike_probability:
-            strike = AsteroidStrike("AsteroidStrike", self, duration=3)
-
         # Set lifepod location at the center of the grid
         self.lifepod_location = (width // 2, height // 2)
 
@@ -91,10 +87,29 @@ class SpaceColony(Model):
             self.is_night = True
         print(f"Time Step: {self.time_step}, Night: {self.is_night}")
 
+    def toggle_asteroid_strike(self, duration):
+
+        self.positions = []  # Store positions where the asteroid strike will happen
+        print("Strike created")
+        all_cells = list(self.grid.coord_iter())
+        random_cells = self.random.sample(all_cells, min(5, len(all_cells)))
+        for cell in random_cells:
+            cell_pos = cell[1]  # Get position of the cell
+            self.positions.append(cell_pos)
+
+        for pos in self.positions:
+            asteroid_strike = AsteroidStrike(self, duration, pos)
+            self.grid.place_agent(asteroid_strike, pos)
+
+        print(f"Asteroid strikes placed at positions: {self.positions}")
+
     def step(self):
         """Advance the model by one step."""
         # Update the day-night cycle
         self.toggle_day_night()
+
+        if self.random.random() < self.strike_probability:
+            self.toggle_asteroid_strike(3)
 
         # Collect data and advance agents
         self.datacollector.collect(self)

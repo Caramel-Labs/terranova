@@ -9,8 +9,8 @@ class Miner(BaseHumanAgent):
 
     def step(self):
         """Perform the miner's actions for each step."""
+        lifepod = self.get_lifepod()
         if self.model.is_night:  # Check if it's nighttime
-            lifepod = self.get_lifepod()
             if lifepod:
                 print(
                     f"Miner at {self.pos} moving towards Lifepod at {lifepod.pos} during the night."
@@ -22,14 +22,13 @@ class Miner(BaseHumanAgent):
                         f"Miner at {self.pos} is staying at the Lifepod during the night."
                     )
         else:  # Daytime actions
+            lifepod = self.get_lifepod()  # Ensure lifepod is fetched
             if self.stamina > 0 and self.iron != self.inventory:
                 nearest_drill = self.find_nearest_drill()
-
                 if nearest_drill:
                     print(
                         f"Miner at {self.pos} moving towards drill at {nearest_drill.pos}"
                     )
-
                     # Check if miner is within one step of the drill
                     if self.is_near_drill(nearest_drill):
                         print(
@@ -43,8 +42,17 @@ class Miner(BaseHumanAgent):
                     print("No drill found.")
                     self.rest()  # If no drill is found, the miner rests
             elif self.stamina > 0 and self.iron == self.inventory:
-                lifepod = self.get_lifepod()
-                self.move_towards(lifepod.pos)
+                # Move towards the lifepod to store iron
+                if lifepod and self.pos != lifepod.pos:
+                    print(
+                        f"Miner at {self.pos} moving towards Lifepod at {lifepod.pos}"
+                    )
+                    self.move_towards(lifepod.pos)
+                elif lifepod and self.pos == lifepod.pos:
+                    # Store iron only when at the Lifepod's position
+                    lifepod.store_iron(self.iron)
+                    print(f"Stored {self.iron} iron in the Lifepod.")
+                    self.iron = 0  # Reset the miner's iron after storing it
             else:
                 self.rest()  # Rest when stamina is depleted
 
@@ -99,11 +107,7 @@ class Miner(BaseHumanAgent):
                     # Move towards the Lifepod
                     if self.pos != lifepod.pos:
                         self.move_towards(lifepod.pos)
-                    else:
-                        # Store iron only when at the Lifepod's position
-                        lifepod.store_iron(self.iron)
-                        print(f"Stored {self.iron} iron in the Lifepod.")
-                        self.iron = 0  # Reset the miner's iron after storing it
+
             self.stamina -= 10  # Miner consumes stamina each time they collect iron
         else:
             print("Drill cannot be used due to lack of fuel or health.")
@@ -206,8 +210,9 @@ class Farmer(BaseHumanAgent):
         self.food = 0
 
     def step(self):
+        lifepod = self.get_lifepod()
         if self.model.is_night:  # Check if it's nighttime
-            lifepod = self.get_lifepod()
+
             if lifepod:
                 print(
                     f"Farmer at {self.pos} moving towards Lifepod at {lifepod.pos} during the night."
@@ -219,29 +224,42 @@ class Farmer(BaseHumanAgent):
                         f"Farmer at {self.pos} is staying at the Lifepod during the night."
                     )
         else:  # Daytime actions
-            if self.stamina > 0:
-                nearest_greenhouse = (
-                    self.find_nearest_greenhouse()
-                )  # Find the nearest greenhouse
-
+            lifepod = self.get_lifepod()  # Ensure lifepod is fetched
+            if self.stamina > 0 and self.food != self.inventory:
+                nearest_greenhouse = self.find_nearest_greenhouse()
                 if nearest_greenhouse:
-                    # Move towards the greenhouse until the farmer is near it
-                    if not self.near_greenhouse(nearest_greenhouse):
-                        self.move_towards(nearest_greenhouse.pos)
+                    print(
+                        f"Farmer at {self.pos} moving towards greenhouse at {nearest_greenhouse.pos}"
+                    )
+                    # Check if farmer is within one step of the greenhouse
+                    if self.near_greenhouse(nearest_greenhouse):
                         print(
-                            f"Farmer at {self.pos} is moving towards greenhouse at {nearest_greenhouse.pos}."
+                            f"Farmer is near the greenhouse at {nearest_greenhouse.pos}. Starting to collect."
                         )
+                        self.collect_food(nearest_greenhouse)
                     else:
-                        self.collect_food(
-                            nearest_greenhouse
-                        )  # Collect food if near the greenhouse
+                        # Move towards the greenhouse
+                        self.move_towards(nearest_greenhouse.pos)
                 else:
                     print("No greenhouse found.")
+                    self.rest()  # If no greenhouse is found, the farmer rests
+            elif self.stamina > 0 and self.food == self.inventory:
+                # Move towards the lifepod to store food
+                if lifepod and self.pos != lifepod.pos:
+                    print(
+                        f"Farmer at {self.pos} moving towards Lifepod at {lifepod.pos}"
+                    )
+                    self.move_towards(lifepod.pos)
+                elif lifepod and self.pos == lifepod.pos:
+                    # Store food only when at the Lifepod's position
+                    lifepod.store_food(self.food)
+                    print(f"Stored {self.food} food in the Lifepod.")
+                    self.food = 0  # Reset the farmer's food after storing it
             else:
                 self.rest()  # Rest when stamina is depleted
 
     def collect_food(self, greenhouse):
-        """Collect food from the greenhouse and store in the Lifepod."""
+        """Collect food from the greenhouse"""
         if greenhouse.food > 0:
             # Calculate how much food to collect based on inventory space and available food
             food_to_collect = min(self.inventory - self.food, greenhouse.food)
@@ -259,13 +277,6 @@ class Farmer(BaseHumanAgent):
                     # Move towards the Lifepod
                     if self.pos != lifepod.pos:
                         self.move_towards(lifepod.pos)
-                    else:
-                        # Store food only when at the Lifepod's position
-                        lifepod.store_food(self.food)
-                        print(f"Stored {self.food} food in the Lifepod.")
-                        self.food = (
-                            0  # Reset the farmer's food inventory after storing it
-                        )
 
             # Decrease stamina for collecting food
             self.stamina = max(self.stamina - 5, 0)
