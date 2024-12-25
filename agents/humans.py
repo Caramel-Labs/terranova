@@ -119,7 +119,7 @@ class Engineer(BaseHumanAgent):
                     else:
                         self.repair_time += 1  # Increment repair time during repair
                         if (
-                            self.repair_time >= 20
+                            self.repair_time >= 10
                         ):  # If 20 steps have passed, complete the repair
                             self.complete_repair(nearest_broken_drill)
                 else:
@@ -163,8 +163,8 @@ class Engineer(BaseHumanAgent):
             pass  # Drill is not broken, no repair needed
 
     def complete_repair(self, drill):
-        """Complete the repair after 20 steps."""
-        if self.repair_time >= 20:  # Complete repair only after 20 steps
+        """Complete the repair after 10 steps."""
+        if self.repair_time >= 10:  # Complete repair only after 20 steps
             drill.repair()  # Complete the repair
             self.repair_time = 0  # Reset repair time counter
             self.stamina = max(
