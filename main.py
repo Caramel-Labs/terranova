@@ -41,13 +41,15 @@ def initialize_space_colony():
     # BACKGROUND IMAGES
     # --------------------------------------------
 
-    # Load and scale the day background image to fit one grid cell
-    bg_day_image = pygame.image.load("./assets/mars.png")
-    bg_day_image = pygame.transform.scale(bg_day_image, (cell_size, cell_size))
+    # Load and scale the day background image to fit the full display surface
+    bg_day_image = pygame.image.load("./assets/background.png")
+    bg_day_image = pygame.transform.scale(bg_day_image, (screen_width, screen_height))
 
-    # Load and scale the night background image to fit one grid cell
+    # Load and scale the night background image to fit the full display surface
     bg_night_image = pygame.image.load("./assets/mars-night.jpg")
-    bg_night_image = pygame.transform.scale(bg_night_image, (cell_size, cell_size))
+    bg_night_image = pygame.transform.scale(
+        bg_night_image, (screen_width, screen_height)
+    )
 
     # --------------------------------------------
     # STRUCTURE IMAGES
@@ -94,10 +96,10 @@ def initialize_space_colony():
     asteroid_strike_image = pygame.transform.scale(
         asteroid_strike_image, (cell_size, cell_size)
     )
+    blast_frames = [pygame.image.load(f"./assets/zombie.png") for i in range(1, 6)]
     blast_frames = [
-        pygame.image.load(f"./assets/zombie.png") for i in range(1, 6)
+        pygame.transform.scale(frame, (cell_size, cell_size)) for frame in blast_frames
     ]
-    blast_frames = [pygame.transform.scale(frame, (cell_size, cell_size)) for frame in blast_frames]
 
     # --------------------------------------------
     # OTHER CONFIGURATIONS
@@ -150,11 +152,9 @@ def initialize_space_colony():
         # Determine if it's night
         is_night = current_data["Is Night"]
 
-        # Choose the appropriate background image
+        # Draw the full screen background
         bg_image = bg_night_image if is_night else bg_day_image
-
-        # Clear the screen
-        screen.fill(BLACK)
+        screen.blit(bg_image, (0, 0))
 
         lifepod_positions = []  # Track lifepod positions for rendering effects
 
@@ -164,20 +164,12 @@ def initialize_space_colony():
 
         # Draw the grid and agents
         for contents, (x, y) in model.grid.coord_iter():
-            # Draw the background image for the cell
-            screen.blit(bg_image, (x * cell_size, y * cell_size))
-
             # Check if a Lifepod is present in the cell
             lifepod_present = any(
                 type(agent).__name__ == "Lifepod" for agent in contents
             )
             if lifepod_present:
                 lifepod_positions.append((x, y))
-
-            # Check if an AsteroidStrike is present in the cell
-            asteroid_strike_present = any(
-                type(agent).__name__ == "AsteroidStrike" for agent in contents
-            )
 
             # Draw the agents in the cell
             for agent in contents:
@@ -214,8 +206,6 @@ def initialize_space_colony():
                 elif type(agent).__name__ == "AsteroidStrike":
                     # Draw the asteroid strike image
                     screen.blit(asteroid_strike_image, (x * cell_size, y * cell_size))
-                    # Play the blasting animation
-                    #draw_blast_animation(screen, x, y, blast_frames, cell_size, clock)
 
         # Render the zzz image during nighttime diagonally top-right of Lifepods
         if is_night:
@@ -276,11 +266,11 @@ def draw_stamina_bar(screen, value, x, y, cell_size):
     pygame.draw.rect(screen, BLACK, (bar_x, bar_y, bar_width, bar_height))
 
     # Filled portion (green)
-    filled_width = int(bar_width * (value/100))
-    pygame.draw.rect(screen, (255,245,34), (bar_x, bar_y, filled_width, bar_height))
+    filled_width = int(bar_width * (value / 100))
+    pygame.draw.rect(screen, (255, 245, 34), (bar_x, bar_y, filled_width, bar_height))
 
 
-#blast animation
+# blast animation
 def draw_blast_animation(screen, x, y, frames, cell_size, clock, duration=0.5):
     frame_time = duration / len(frames)
     for frame in frames:
