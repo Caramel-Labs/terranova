@@ -13,7 +13,7 @@ INITIAL_ZOMBIES = 5
 INITIAL_HUMANS = 20
 
 # Number of iterations to run the simulation
-STEPS = 100
+STEPS = 200
 
 # Colors for rendering
 WHITE = (255, 255, 255)

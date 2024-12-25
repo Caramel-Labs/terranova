@@ -50,7 +50,7 @@ class Greenhouse(Agent):
 
 
 class Drill(Agent):
-    def __init__(self, model, max_fuel=69, max_health=69):
+    def __init__(self, model, max_fuel=50, max_health=50):
         super().__init__(model)
         self.fuel = max_fuel
         self.iron = 0
@@ -67,8 +67,8 @@ class Drill(Agent):
 
     def repair(self):
         """Repair the drill to full health and reset fuel."""
-        self.health = 69  # Full health after repair
-        self.fuel = 69  # Reset fuel after repair
+        self.health = 50  # Full health after repair
+        self.fuel = 50  # Reset fuel after repair
 
     def mine(self):
         """Simulate mining using the drill."""
